@@ -20,7 +20,8 @@ s.textContent=':root{--bg:#f7fcf9;--card:#fff;--text:#0f172a;--muted:#64748b;--a
 +'.ck{width:20px;height:20px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;margin-top:2px}'
 +'.wrow{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:10px;background:rgba(100,116,139,.06);margin-bottom:6px;font-size:14px}.wrow button{background:none;border:none;color:#dc2626;font-weight:800;cursor:pointer;font-size:16px}'
 +'.bu-btn{padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;background:var(--card);border:1px solid var(--border);color:var(--muted);cursor:pointer;margin:3px}.bu-btn:hover{border-color:var(--accent);color:var(--accent)}'
-+'.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}';
++'.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}'
++'.meal-row{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}.meal-row:last-child{border-bottom:none}';
 document.head.appendChild(s);
 })();
 </script>
@@ -28,7 +29,7 @@ document.head.appendChild(s);
 <div class="max-w-5xl mx-auto px-5 py-10">
 
 <div class="mb-8">
-<p style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:800;margin-bottom:10px;">Tiến độ tập · Giảm cân · Đếm calo · TDEE</p>
+<p style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:800;margin-bottom:10px;">Lịch ăn tuần · Tiến độ tập · Giảm cân · TDEE</p>
 <h1 class="text-3xl sm:text-4xl font-black" style="line-height:1.15;">Full-Body tại nhà <span style="background:linear-gradient(100deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;">+ Ăn uống thông minh</span></h1>
 </div>
 
@@ -37,8 +38,8 @@ document.head.appendChild(s);
 <button class="tab-btn" data-tab="tab-food">Nhật ký ăn uống</button>
 <button class="tab-btn" data-tab="tab-workout">Lịch tập tuần</button>
 <button class="tab-btn" data-tab="tab-exlib">Bài tập theo nhóm cơ</button>
-<button class="tab-btn active" data-tab="tab-progress">Tiến độ &amp; Cân nặng</button>
-<button class="tab-btn" data-tab="tab-meal">Lịch ăn gợi ý</button>
+<button class="tab-btn" data-tab="tab-progress">Tiến độ &amp; Cân nặng</button>
+<button class="tab-btn active" data-tab="tab-meal">Lịch ăn tuần</button>
 </div>
 
 <!-- PERSONAL -->
@@ -127,7 +128,7 @@ document.head.appendChild(s);
 </div>
 
 <!-- PROGRESS & WEIGHT -->
-<div class="tab-panel active" id="tab-progress">
+<div class="tab-panel" id="tab-progress">
 <div class="flex flex-wrap gap-6">
 <div class="card" style="flex:1 1 340px;min-width:300px;">
 <h2 class="text-lg font-extrabold mb-1">Tiến độ tập hôm nay</h2>
@@ -156,20 +157,16 @@ document.head.appendChild(s);
 </div>
 </div>
 
-<!-- MEAL -->
-<div class="tab-panel" id="tab-meal">
+<!-- WEEKLY MEAL PLAN -->
+<div class="tab-panel active" id="tab-meal">
 <div class="card mb-6">
-<h2 class="text-lg font-extrabold mb-4">Khung giờ ăn 5 bữa</h2>
-<div style="display:flex;flex-direction:column;gap:12px;">
-<div style="display:flex;gap:12px;align-items:flex-start;"><span class="pill pill-green" style="flex-shrink:0;margin-top:2px;">6:30</span><div class="text-sm"><strong>Sáng</strong> — Yến mạch + sữa không đường + 2 trứng + chuối.</div></div>
-<div style="display:flex;gap:12px;align-items:flex-start;"><span class="pill pill-gray" style="flex-shrink:0;margin-top:2px;">9:30</span><div class="text-sm"><strong>Phụ</strong> — Sữa chua không đường + hạnh nhân.</div></div>
-<div style="display:flex;gap:12px;align-items:flex-start;"><span class="pill pill-green" style="flex-shrink:0;margin-top:2px;">12:00</span><div class="text-sm"><strong>Trưa</strong> — Cơm gạo lứt + ức gà/cá 150g + rau.</div></div>
-<div style="display:flex;gap:12px;align-items:flex-start;"><span class="pill pill-orange" style="flex-shrink:0;margin-top:2px;">15:30</span><div class="text-sm"><strong>Phụ trước tập</strong> — Trứng luộc + chuối.</div></div>
-<div style="display:flex;gap:12px;align-items:flex-start;"><span class="pill pill-green" style="flex-shrink:0;margin-top:2px;">18:30</span><div class="text-sm"><strong>Tối</strong> — Thịt bò/cá hồi + khoai lang + salad.</div></div>
-</div>
+<h2 class="text-lg font-extrabold mb-1">Lịch ăn cả tuần — chọn ngày để xem món</h2>
+<p class="text-sm mb-4" style="color:var(--muted);">Mỗi ngày đủ 5 bữa, món đa dạng, ~1500–1900 kcal. Uống 2–2.5 lít nước/ngày.</p>
+<div id="mealDayBar" class="mb-4"></div>
+<div id="mealDayContent"></div>
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div class="card" style="background:var(--accent-soft);border-color:var(--accent);"><strong style="color:var(--accent);">✓ Ưu tiên</strong><p class="text-sm mt-2" style="line-height:1.7;">Thịt nạc, cá, trứng, sữa không đường, gạo lứt, yến mạch, khoai lang, rau xanh, bơ, hạt dinh dưỡng.</p></div>
+<div class="card" style="background:var(--accent-soft);border-color:var(--accent);"><strong style="color:var(--accent);">✓ Ưu tiên</strong><p class="text-sm mt-2" style="line-height:1.7;">Thịt nạc, cá, trứng, sữa không đường, gạo lứt, yến mạch, khoai lang, rau xanh, bơ, hạt dinh dưỡng, dầu oliu.</p></div>
 <div class="card" style="background:var(--accent2-soft);border-color:var(--accent2);"><strong style="color:var(--accent2);">✗ Hạn chế</strong><p class="text-sm mt-2" style="line-height:1.7;">Đồ chiên, nước ngọt, bánh kẹo, đồ ăn nhanh, mì gói, rượu bia. Xếp đĩa: 1/2 rau, 1/4 đạm, 1/4 tinh bột tốt.</p></div>
 </div>
 </div>
@@ -213,7 +210,33 @@ var GROUPS=[
 {id:'chan',name:'Chân & mông',ex:[{n:'Squat giữ giàn',t:'Đùi+Mông',s:'3×12–15'},{n:'Lunge bước',t:'Đùi+Mông',s:'3×10/chân'},{n:'Calf raise',t:'Bắp chân',s:'3×15–20'},{n:'Glute bridge',t:'Mông',s:'3×15–20'},{n:'Squat nhảy',t:'Đùi+Đốt calo',s:'3×10'}]}
 ];
 
-// workout progress storage
+// WEEKLY MEAL PLAN
+var MEAL_PLAN=[
+{day:'Thứ 2',tag:'PUSH',color:'#2563ab',m:[['6:30 Sáng','Yến mạch sữa không đường + 2 trứng ốp + 1 chuối'],['9:30 Phụ','Sữa chua không đường + 10 hạt hạnh nhân'],['12:00 Trưa','Cơm gạo lứt + ức gà áp chảo 150g + rau cải luộc'],['15:30 Phụ','1 trứng luộc + 1 chuối'],['18:30 Tối','Cá hồi nướng 150g + khoai lang + salad dầu oliu']]},
+{day:'Thứ 3',tag:'ACTIVE',color:'#64748b',m:[['6:30 Sáng','Bánh mì nguyên cám + 2 trứng + lát bơ'],['9:30 Phụ','Nước cam tươi + hạnh nhân'],['12:00 Trưa','Phở gà (ít mỡ) + rau sống, ăn vừa phải'],['15:30 Phụ','Sữa chua không đường + quả mọng'],['18:30 Tối','Thịt bò xào rau củ + cơm gạo lứt ít']]},
+{day:'Thứ 4',tag:'PULL',color:'#0d9669',m:[['6:30 Sáng','Cháo yến mạch sữa + chuối + 1 trứng'],['9:30 Phụ','Trứng luộc + cà rốt cọng'],['12:00 Trưa','Cơm gạo lứt + tôm hấp 150g + rau muống xào tỏi'],['15:30 Phụ','Sữa không đường + ngũ cốc nguyên cám'],['18:30 Tối','Ức gà salad + 1 lát bánh mì nguyên cám']]},
+{day:'Thứ 5',tag:'ACTIVE',color:'#64748b',m:[['6:30 Sáng','Trứng ốp la + bánh mì nguyên cám + cà chua'],['9:30 Phụ','Chuối + 10 hạt điều'],['12:00 Trưa','Bún chả nướng (ít nước mắm) + rau sống'],['15:30 Phụ','Sữa chua không đường'],['18:30 Tối','Cá thu nướng + cơm gạo lứt + rau luộc']]},
+{day:'Thứ 6',tag:'LEGS',color:'#d4724a',m:[['6:30 Sáng','Yến mạch sữa + 2 trứng + chuối (nạp năng lượng)'],['9:30 Phụ','Sữa chua + hạt điều'],['12:00 Trưa','Cơm gạo lứt + thịt bò bít tết 150g + rau'],['15:30 Phụ','Trứng luộc + chuối (trước tập)'],['18:30 Tối','Sườn non nướng + khoai lang + salad']]},
+{day:'Thứ 7',tag:'NGHỈ',color:'#94a3b8',m:[['7:00 Sáng','Phở gà / bún riêu (vừa phải, ít mỡ)'],['10:00 Phụ','Trái cây: táo / ổi / nho'],['12:00 Trưa','Cơm trắng vừa + cá kho tộ + canh rau'],['15:30 Phụ','Sữa chua không đường'],['18:30 Tối','Salad ức gà lớn + súp rau củ']]},
+{day:'Chủ nhật',tag:'TỰ DO',color:'#94a3b8',m:[['7:30 Sáng','Bánh cuốn / xôi gấc (vừa, không ăn no)'],['10:00 Phụ','Trái cây theo mùa'],['12:00 Trưa','Cơm tấm sườn (ít dầu) + rau sống (cheat vừa)'],['15:30 Phụ','Sữa không đường'],['18:30 Tối','Lẩu thái ít mỡ / thịt nướng + nhiều rau sống']]}
+];
+var mealBar=document.getElementById('mealDayBar');
+MEAL_PLAN.forEach(function(d,i){
+var b=document.createElement('span');b.className='subtab-btn'+(i===0?' active':'');b.textContent=d.day;b.style.cursor='pointer';
+b.addEventListener('click',function(){mealBar.querySelectorAll('.subtab-btn').forEach(function(x){x.classList.remove('active');});b.classList.add('active');renderMealDay(i);});
+mealBar.appendChild(b);
+});
+function renderMealDay(i){
+var d=MEAL_PLAN[i],box=document.getElementById('mealDayContent');
+var html='<p class="text-sm mb-3" style="color:var(--muted);"><strong style="color:'+d.color+';">'+d.day+' · '+d.tag+'</strong> — 5 bữa, ~1500–1900 kcal</p>';
+d.m.forEach(function(mm){
+var parts=mm[0].split(' ');
+html+='<div class="meal-row"><span class="pill pill-green" style="flex-shrink:0;margin-top:2px;">'+parts[0]+'</span><div class="text-sm" style="line-height:1.6;flex:1;"><strong>'+parts[1]+'</strong> — '+mm[1]+'</div></div>';
+});
+box.innerHTML=html;
+}
+renderMealDay(0);
+
 function getWLog(){try{return JSON.parse(localStorage.getItem('fit_workout')||'{}');}catch(e){return{};}}
 function saveWLog(o){try{localStorage.setItem('fit_workout',JSON.stringify(o));}catch(e){}}
 function wKey(d){return todayStr()+'|'+d;}
@@ -222,7 +245,6 @@ function isDone(d,i){return doneArr(d).indexOf(i)>=0;}
 function toggleDone(d,i){var l=getWLog(),k=wKey(d),a=l[k]||[],j=a.indexOf(i);if(j>=0)a.splice(j,1);else a.push(i);if(!a.length)delete l[k];else l[k]=a;saveWLog(l);}
 function getMonday(){var d=new Date(),day=d.getDay()||7;d.setDate(d.getDate()-(day-1));return d.getFullYear()+'-'+(''+(d.getMonth()+1)).padStart(2,'0')+'-'+(''+d.getDate()).padStart(2,'0');}
 
-// tab switching
 document.getElementById('tabBar').addEventListener('click',function(e){
 var b=e.target.closest('.tab-btn');if(!b)return;
 var t=b.getAttribute('data-tab');
@@ -233,7 +255,6 @@ document.getElementById(t).classList.add('active');
 setTimeout(function(){if(macroChart)macroChart.resize();if(weightChart)weightChart.resize();},80);
 });
 
-// workout day subtabs + checklist
 var dayBar=document.getElementById('dayTabBar');
 DAYS.forEach(function(d,i){
 var b=document.createElement('span');b.className='subtab-btn'+(i===0?' active':'');b.textContent=d.name;b.style.cursor='pointer';
@@ -254,7 +275,6 @@ box.appendChild(card);
 }
 renderDayCards('push');
 
-// exercise library subtabs
 var subBar=document.getElementById('subTabBar');
 GROUPS.forEach(function(g,i){
 var b=document.createElement('span');b.className='subtab-btn'+(i===0?' active':'');b.textContent=g.name;b.style.cursor='pointer';
@@ -273,7 +293,6 @@ box.appendChild(c);
 }
 renderEx('lung');
 
-// macro chart
 (function initM(n){
 var el=document.getElementById('macroChart');if(!el)return;
 if(typeof echarts==='undefined'){if(n<40)setTimeout(function(){initM(n+1);},250);return;}
@@ -288,7 +307,6 @@ series:[{type:'pie',radius:['45%','70%'],center:['50%','42%'],label:{show:true,f
 data:[{value:Math.round(pk),name:'Đạm '+state.proteinG+'g',itemStyle:{color:'#0d9669'}},{value:Math.round(ck),name:'Carb '+state.carbsG+'g',itemStyle:{color:'#d4724a'}},{value:Math.round(fk),name:'Béo '+state.fatG+'g',itemStyle:{color:'#94a3b8'}}]}]},true);
 }
 
-// calc TDEE
 document.getElementById('calcBtn').addEventListener('click',function(){
 var age=+document.getElementById('fAge').value||28,h=+document.getElementById('fHeight').value||170,w=+document.getElementById('fWeight').value||65;
 var gender=document.getElementById('fGender').value,act=+document.getElementById('fAct').value||1.55,goal=document.getElementById('fGoal').value;
@@ -317,7 +335,6 @@ document.getElementById('sizeResult').innerHTML='<div style="display:flex;gap:14
 +'<div style="flex:1 1 120px;padding:16px;border-radius:14px;background:var(--accent2-soft);text-align:center;border:1px solid var(--accent2);"><div class="text-xs font-bold" style="color:var(--muted);">Quần/Bottom</div><div class="text-4xl font-black mt-1" style="color:var(--accent2);">'+pants+'</div></div></div>';
 });
 
-// food chips
 var FOODS=[['Phở bò',450,25,60,12],['Bún chả',550,30,70,18],['Cơm tấm sườn',700,35,90,22],['Bánh mì thịt',450,18,60,15],['Ức gà 150g',250,46,0,6],['Cá hồi 150g',310,34,0,19],['Cơm gạo lứt',220,5,46,2],['Trứng',78,6,0.6,5],['Sữa không đường',120,8,12,5],['Chuối',105,1,27,0],['Salad',60,2,10,2],['Khoai lang',130,2,30,0],['Mì gói',400,14,55,14]];
 var chipBox=document.getElementById('foodChips');
 FOODS.forEach(function(f){
@@ -371,7 +388,6 @@ else{msg.textContent='Mục tiêu: '+state.targetKcal+' kcal · Đạm '+state.p
 }
 renderMealList();renderCompare();
 
-// progress tab
 document.getElementById('progReset').addEventListener('click',function(){
 if(!state.progDay)return;
 var l=getWLog(),k=wKey(state.progDay);if(l[k]){delete l[k];saveWLog(l);}
@@ -406,7 +422,6 @@ document.getElementById('weekStat').textContent='Tuần này đã hoàn thành '
 }
 renderProg();
 
-// weight tracking
 function getWt(){try{return JSON.parse(localStorage.getItem('fit_weight')||'[]');}catch(e){return[];}}
 function saveWt(a){try{localStorage.setItem('fit_weight',JSON.stringify(a));}catch(e){}}
 document.getElementById('wDate').value=todayStr();
