@@ -1,0 +1,540 @@
+<html style="margin:0;padding:0;">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script>
+(function(){
+  var s = document.createElement('style');
+  s.textContent = ':root{--bg:#f7fcf9;--card:#ffffff;--text:#0f172a;--muted:#64748b;--accent:#0d9669;--accent-soft:rgba(13,150,105,.14);--accent2:#d4724a;--accent2-soft:rgba(212,114,74,.14);--border:rgba(15,23,42,.08)}'
+  +'.reveal{opacity:0;transform:translateY(18px);animation:fadeUp .55s ease forwards}.reveal:nth-child(2){animation-delay:.08s}.reveal:nth-child(3){animation-delay:.16s}.reveal:nth-child(4){animation-delay:.24s}@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}'
+  +'.metric-card{transition:transform .2s ease,box-shadow .2s ease}.metric-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(13,150,105,.12)}'
+  +'.tbl-row{transition:background .15s ease}.tbl-row:hover{background:rgba(13,150,105,.05)}'
+  +'.tab-btn{padding:9px 16px;border-radius:999px;font-weight:700;font-size:13px;color:var(--muted);background:transparent;border:1px solid var(--border);cursor:pointer;transition:all .2s ease;white-space:nowrap}'
+  +'.tab-btn:hover{color:var(--text);border-color:var(--accent)}'
+  +'.tab-btn.active{color:var(--text);background:var(--accent-soft);border:1px solid var(--accent)}'
+  +'.tab-panel{display:none}.tab-panel.active{display:block;animation:fadeUp .4s ease}'
+  +'.day-card{border-radius:14px;padding:12px 8px;text-align:center;border:1px solid var(--border);background:var(--card);transition:transform .2s ease}'
+  +'.day-card:hover{transform:translateY(-2px)}'
+  +'.day-workout{border-top:3px solid var(--accent)}.day-active{border-top:3px solid var(--accent2)}.day-rest{opacity:.55}'
+  +'.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.04em}'
+  +'.pill-green{background:var(--accent-soft);color:var(--accent)}.pill-orange{background:var(--accent2-soft);color:var(--accent2)}.pill-gray{background:rgba(100,116,139,.12);color:var(--muted)}'
+  +'.food-chip{padding:7px 13px;border-radius:999px;font-size:13px;font-weight:700;background:var(--card);border:1px solid var(--border);color:var(--text);cursor:pointer;transition:all .15s ease;margin:3px}'
+  +'.food-chip:hover{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-1px)}'
+  +'.log-meal{padding:12px 14px;border-radius:12px;background:var(--card);border:1px solid var(--border);margin-bottom:8px;font-size:14px}'
+  +'.log-meal .dish{font-size:13px;color:var(--muted);margin-left:10px;margin-top:3px}'
+  +'.scan-bar{height:10px;border-radius:999px;background:rgba(128,128,128,.12);overflow:hidden;margin-top:6px}'
+  +'.scan-fill{height:100%;width:0%;border-radius:999px;transition:width .4s ease}'
+  +'.inp{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px;font-family:inherit;box-sizing:border-box}'
+  +'.inp:focus{outline:none;border-color:var(--accent)}'
+  +'.btn-primary{padding:12px 24px;border-radius:12px;font-weight:800;font-size:15px;background:var(--accent-soft);color:var(--text);border:1px solid var(--accent);cursor:pointer;transition:all .2s ease;font-family:inherit}'
+  +'.btn-primary:hover:not(:disabled){background:var(--accent);color:#fff}'
+  +'.btn-primary:disabled{opacity:.5;cursor:not-allowed}'
+  +'.btn-secondary{padding:10px 18px;border-radius:12px;font-weight:700;font-size:14px;background:var(--card);color:var(--text);border:1px solid var(--border);cursor:pointer;transition:all .2s ease;font-family:inherit}'
+  +'.btn-secondary:hover{border-color:var(--accent)}'
+  +'.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}'
+  +'@keyframes spin{to{transform:rotate(360deg)}}';
+  document.head.appendChild(s);
+})();
+</script>
+<div style="background-color:transparent;box-sizing:border-box;">
+<div style="color:var(--text);font-family:'Nunito',sans-serif;background:radial-gradient(900px 420px at 15% -5%, var(--accent-soft), transparent 60%), var(--bg);">
+<div class="max-w-5xl mx-auto px-5 py-10">
+
+  <div class="reveal mb-8">
+    <p style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:800;margin-bottom:10px;">AI Vision · Theo dõi dinh dưỡng thật</p>
+    <h1 class="text-3xl sm:text-4xl font-black" style="line-height:1.15;letter-spacing:-.02em;">Quét món ăn bằng AI <span style="background:linear-gradient(100deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;">+ Full-Body tại nhà</span></h1>
+    <p class="mt-3 text-sm" style="color:var(--muted);line-height:1.7;max-width:620px;">Chụp ảnh món ăn → AI nhận diện, ước lượng gam &amp; kcal/đạm/carb/béo → cộng dồn cả ngày → so sánh với TDEE của bạn. Kèm lịch tập giàn xà đa năng và gợi ý size quần áo.</p>
+  </div>
+
+  <div class="reveal mb-6">
+    <div class="flex flex-wrap gap-2" id="tabBar">
+      <button class="tab-btn active" data-tab="tab-ai">AI quét món ăn</button>
+      <button class="tab-btn" data-tab="tab-personal">Cá nhân &amp; TDEE</button>
+      <button class="tab-btn" data-tab="tab-workout">Lịch tập</button>
+      <button class="tab-btn" data-tab="tab-meal">Lịch ăn gợi ý</button>
+    </div>
+  </div>
+
+  <!-- ============ TAB: AI SCAN ============ -->
+  <div class="tab-panel active" id="tab-ai">
+    <div class="flex flex-wrap gap-6">
+      <!-- LEFT: capture + analyze -->
+      <div style="flex:1 1 340px;min-width:300px;display:flex;flex-direction:column;gap:6px;">
+        <div class="rounded-2xl p-6" style="background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);">
+          <div class="flex justify-between items-center mb-3">
+            <h2 class="text-lg font-extrabold">1. Chụp / tải ảnh</h2>
+            <button id="keyToggle" class="text-xs font-bold" style="background:none;border:none;color:var(--accent);cursor:pointer;">Cài đặt AI ▾</button>
+          </div>
+          <div id="keyBox" style="display:none;margin-bottom:14px;padding:12px;border-radius:12px;background:var(--accent-soft);border:1px solid var(--accent);">
+            <label class="text-xs font-bold" style="color:var(--muted);">Gemini API Key (miễn phí tại aistudio.google.com)</label>
+            <div class="flex gap-2 mt-1">
+              <input id="apiKey" type="password" class="inp flex-1" placeholder="AIza...">
+              <button id="saveKey" class="btn-secondary" style="flex-shrink:0;">Lưu</button>
+            </div>
+            <p id="keyStatus" class="text-xs mt-2" style="color:var(--muted);">Chưa có key — AI Vision sẽ không hoạt động. Bạn vẫn thêm món thủ công bên dưới.</p>
+          </div>
+          <input type="file" id="camInput" accept="image/*" capture="environment" style="display:none;">
+          <input type="file" id="libInput" accept="image/*" style="display:none;">
+          <div class="flex gap-2 mb-4">
+            <button class="btn-secondary flex-1" onclick="document.getElementById('camInput').click()">Chụp ảnh</button>
+            <button class="btn-secondary flex-1" onclick="document.getElementById('libInput').click()">Từ thư viện</button>
+          </div>
+          <div id="previewBox" style="border-radius:14px;border:2px dashed var(--border);min-height:200px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+            <p class="text-sm text-center px-4" style="color:var(--muted);">Ảnh món ăn sẽ hiển thị ở đây</p>
+          </div>
+          <button id="analyzeBtn" class="btn-primary w-full mt-4" disabled>Phân tích bằng AI</button>
+          <p id="aiStatus" class="text-xs mt-3 text-center" style="color:var(--muted);min-height:18px;"></p>
+        </div>
+
+        <!-- Analysis result -->
+        <div id="analysisBox" class="rounded-2xl p-6" style="background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);display:none;">
+          <h3 class="font-extrabold mb-3">2. Kết quả phân tích bữa ăn này</h3>
+          <div id="analysisContent"></div>
+          <button id="addMealBtn" class="btn-primary w-full mt-4" style="display:none;">+ Thêm bữa ăn này vào nhật ký hôm nay</button>
+        </div>
+
+        <!-- Manual fallback -->
+        <div class="rounded-2xl p-6" style="background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);">
+          <h3 class="font-extrabold mb-2 text-sm">Thêm thủ công (không cần AI)</h3>
+          <div id="foodChips" class="flex flex-wrap"></div>
+          <div class="flex gap-2 mt-3">
+            <input id="customFood" class="inp flex-1" placeholder="Tên | kcal | đạmg | carbg | béog">
+            <button id="addCustom" class="btn-secondary" style="flex-shrink:0;">Thêm</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: daily log + comparison -->
+      <div style="flex:1 1 340px;min-width:300px;display:flex;flex-direction:column;gap:6px;">
+        <div class="rounded-2xl p-6" style="background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="font-extrabold">3. Nhật ký hôm nay</h3>
+            <button id="clearLog" class="text-xs font-bold" style="background:none;border:none;color:#dc2626;cursor:pointer;">Đặt lại ngày</button>
+          </div>
+          <div id="mealList"><p class="text-sm" style="color:var(--muted);">Chưa có bữa ăn nào. Hãy chụp ảnh và phân tích, hoặc thêm thủ công.</p></div>
+        </div>
+
+        <div class="rounded-2xl p-6" style="background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);">
+          <h3 class="font-extrabold mb-4">Tổng ngày vs mục tiêu (TDEE)</h3>
+          <div id="compareBars"></div>
+          <p id="compareMsg" class="text-xs mt-3" style="color:var(--muted);line-height:1.6;">Mục tiêu mặc định 2000 kcal — sang tab "Cá nhân &amp; TDEE" nhập chỉ số để tính chính xác TDEE và macro của bạn.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB: PERSONAL & TDEE ============ -->
+  <div class="tab-panel" id="tab-personal">
+    <div class="flex flex-wrap gap-6 mb-6">
+      <div class="rounded-2xl p-6" style="flex:1 1 320px;min-width:280px;background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);">
+        <h2 class="text-lg font-extrabold mb-4">Chỉ số cá nhân</h2>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="text-xs font-bold" style="color:var(--muted);">Giới tính</label><select id="fGender" class="inp mt-1"><option value="male">Nam</option><option value="female">Nữ</option></select></div>
+          <div><label class="text-xs font-bold" style="color:var(--muted);">Tuổi</label><input id="fAge" type="number" class="inp mt-1" value="28"></div>
+          <div><label class="text-xs font-bold" style="color:var(--muted);">Chiều cao (cm)</label><input id="fHeight" type="number" class="inp mt-1" value="170"></div>
+          <div><label class="text-xs font-bold" style="color:var(--muted);">Cân nặng (kg)</label><input id="fWeight" type="number" class="inp mt-1" value="65"></div>
+          <div class="col-span-2"><label class="text-xs font-bold" style="color:var(--muted);">Mức hoạt động</label><select id="fAct" class="inp mt-1"><option value="1.2">Ít vận động (văn phòng)</option><option value="1.375">Nhẹ (1–3 buổi/tuần)</option><option value="1.55" selected>Vừa (3–5 buổi/tuần)</option><option value="1.725">Nặng (6–7 buổi/tuần)</option></select></div>
+          <div class="col-span-2"><label class="text-xs font-bold" style="color:var(--muted);">Mục tiêu</label><select id="fGoal" class="inp mt-1"><option value="cut">Giảm mỡ (−400 kcal)</option><option value="maintain" selected>Duy trì hình thể</option><option value="bulk">Tăng cơ (+300 kcal)</option></select></div>
+        </div>
+        <p class="text-xs font-bold mt-4 mb-2" style="color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Số đo (tùy chọn — gợi ý size)</p>
+        <div class="grid grid-cols-3 gap-3">
+          <div><label class="text-xs font-bold" style="color:var(--muted);">Ngực (cm)</label><input id="fChest" type="number" class="inp mt-1" placeholder="98"></div>
+          <div><label class="text-xs font-bold" style="color:var(--muted);">Eo (cm)</label><input id="fWaist" type="number" class="inp mt-1" placeholder="82"></div>
+          <div><label class="text-xs font-bold" style="color:var(--muted);">Mông (cm)</label><input id="fHip" type="number" class="inp mt-1" placeholder="100"></div>
+        </div>
+        <button id="calcBtn" class="btn-primary w-full mt-5">Tính TDEE, BMI &amp; size</button>
+      </div>
+      <div style="flex:1 1 340px;min-width:280px;display:flex;flex-direction:column;gap:6px;">
+        <div class="rounded-2xl p-6" style="background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);">
+          <h2 class="text-lg font-extrabold mb-3">Kết quả của bạn</h2>
+          <div id="resultBox" class="text-sm" style="color:var(--muted);line-height:1.8;">Nhập chỉ số rồi bấm nút tính để xem BMI, TDEE, calo &amp; macro mục tiêu — sẽ dùng ngay để so sánh với nhật ký ăn.</div>
+        </div>
+        <div class="rounded-2xl p-5" style="background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);">
+          <p class="text-xs font-bold mb-2" style="color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Tỷ lệ macro mục tiêu</p>
+          <div id="macroChart" style="height:220px;width:100%;"></div>
+        </div>
+      </div>
+    </div>
+    <div id="sizeBox" class="rounded-2xl p-6" style="background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);display:none;">
+      <h2 class="text-lg font-extrabold mb-3">Gợi ý size quần áo (chuẩn Á / Việt Nam)</h2>
+      <div id="sizeResult" class="text-sm" style="line-height:1.8;"></div>
+      <p class="text-xs mt-3" style="color:var(--muted);">Tham khảo. Thương hiệu Âu-Mỹ hoặc form nữ có thể lệch ±1 size — đối chiếu bảng size của shop.</p>
+    </div>
+  </div>
+
+  <!-- ============ TAB: WORKOUT ============ -->
+  <div class="tab-panel" id="tab-workout">
+    <div class="rounded-2xl p-6 mb-6" style="background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);">
+      <h2 class="text-lg font-extrabold mb-4">Lịch tuần · 3 buổi full-body (T2 / T4 / T6)</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+        <div class="day-card day-workout"><div class="text-xs font-bold" style="color:var(--muted);">Thứ 2</div><div class="font-extrabold mt-1" style="color:var(--accent);">TẬP</div></div>
+        <div class="day-card day-active"><div class="text-xs font-bold" style="color:var(--muted);">Thứ 3</div><div class="font-extrabold mt-1" style="color:var(--accent2);">ACTIVE</div></div>
+        <div class="day-card day-workout"><div class="text-xs font-bold" style="color:var(--muted);">Thứ 4</div><div class="font-extrabold mt-1" style="color:var(--accent);">TẬP</div></div>
+        <div class="day-card day-active"><div class="text-xs font-bold" style="color:var(--muted);">Thứ 5</div><div class="font-extrabold mt-1" style="color:var(--accent2);">ACTIVE</div></div>
+        <div class="day-card day-workout"><div class="text-xs font-bold" style="color:var(--muted);">Thứ 6</div><div class="font-extrabold mt-1" style="color:var(--accent);">TẬP</div></div>
+        <div class="day-card day-rest"><div class="text-xs font-bold" style="color:var(--muted);">Thứ 7</div><div class="font-extrabold mt-1" style="color:var(--muted);">NGHỈ</div></div>
+        <div class="day-card day-rest"><div class="text-xs font-bold" style="color:var(--muted);">CN</div><div class="font-extrabold mt-1" style="color:var(--muted);">TỰ DO</div></div>
+      </div>
+    </div>
+    <div class="rounded-2xl p-6" style="background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);">
+      <h2 class="text-lg font-extrabold mb-4">Bài tập · 3 hiệp / bài · nghỉ 60–90s</h2>
+      <div style="overflow-x:auto;">
+      <table class="w-full text-sm" style="min-width:560px;">
+        <thead><tr class="text-xs uppercase tracking-wide" style="color:var(--muted);border-bottom:1px solid var(--border);"><th class="text-left pb-3 font-extrabold">Bài tập</th><th class="text-left pb-3 font-extrabold">Nhóm cơ</th><th class="text-left pb-3 font-extrabold">Vị trí trên giàn</th><th class="text-left pb-3 font-extrabold">Hiệp × Rep</th></tr></thead>
+        <tbody style="color:var(--text);">
+          <tr class="tbl-row" style="border-bottom:1px solid var(--border);"><td class="py-3 font-bold">Kéo xà nắm rộng</td><td>Lưng, lats</td><td>Xà trên</td><td class="font-bold" style="color:var(--accent);">3 × 6–10</td></tr>
+          <tr class="tbl-row" style="border-bottom:1px solid var(--border);"><td class="py-3 font-bold">Xà kép (Dip)</td><td>Ngực, tay sau, vai</td><td>Xà song song</td><td class="font-bold" style="color:var(--accent);">3 × 8–12</td></tr>
+          <tr class="tbl-row" style="border-bottom:1px solid var(--border);"><td class="py-3 font-bold">Gập bụng treo</td><td>Bụng dưới, core</td><td>Xà trên / đệm lưng</td><td class="font-bold" style="color:var(--accent);">3 × 10–15</td></tr>
+          <tr class="tbl-row" style="border-bottom:1px solid var(--border);"><td class="py-3 font-bold">Kéo xà ngửa cằm</td><td>Lưng, tay trước</td><td>Xà trên nắm hẹp</td><td class="font-bold" style="color:var(--accent);">3 × 6–10</td></tr>
+          <tr class="tbl-row" style="border-bottom:1px solid var(--border);"><td class="py-3 font-bold">Chống đẩy</td><td>Ngực, vai, tay sau</td><td>Tay vịt / sàn</td><td class="font-bold" style="color:var(--accent);">3 × 10–15</td></tr>
+          <tr class="tbl-row" style="border-bottom:1px solid var(--border);"><td class="py-3 font-bold">Squat giữ giàn</td><td>Đùi, mông</td><td>Sàn</td><td class="font-bold" style="color:var(--accent);">3 × 12–15</td></tr>
+          <tr class="tbl-row" style="border-bottom:1px solid var(--border);"><td class="py-3 font-bold">Lunge bước</td><td>Đùi, mông</td><td>Sàn</td><td class="font-bold" style="color:var(--accent);">3 × 10/chân</td></tr>
+          <tr class="tbl-row" style="border-bottom:1px solid var(--border);"><td class="py-3 font-bold">Plank nâng chân</td><td>Core</td><td>Sàn</td><td class="font-bold" style="color:var(--accent);">3 × 30–60s</td></tr>
+          <tr class="tbl-row"><td class="py-3 font-bold">Calf raise</td><td>Bắp chân</td><td>Bậc chân giàn</td><td class="font-bold" style="color:var(--accent);">3 × 15–20</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="text-xs mt-4" style="color:var(--muted);">Chưa kéo xà được → dùng dây kháng lực đỡ chân. Khởi động 5 phút + co giãn 5 phút mỗi buổi.</p>
+    </div>
+  </div>
+
+  <!-- ============ TAB: MEAL SCHEDULE ============ -->
+  <div class="tab-panel" id="tab-meal">
+    <div class="rounded-2xl p-6 mb-6" style="background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);">
+      <h2 class="text-lg font-extrabold mb-4">Khung giờ ăn 5 bữa / ngày</h2>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;"><span class="pill pill-green" style="flex-shrink:0;margin-top:2px;">6:30</span><div class="text-sm" style="line-height:1.6;"><strong>Sáng</strong> — Yến mạch + sữa không đường + 2 trứng ốp + chuối.</div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;"><span class="pill pill-gray" style="flex-shrink:0;margin-top:2px;">9:30</span><div class="text-sm" style="line-height:1.6;"><strong>Phụ</strong> — Sữa chua không đường + hạnh nhân / bơ.</div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;"><span class="pill pill-green" style="flex-shrink:0;margin-top:2px;">12:00</span><div class="text-sm" style="line-height:1.6;"><strong>Trưa</strong> — Cơm gạo lứt + ức gà/cá 150g + rau xanh.</div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;"><span class="pill pill-orange" style="flex-shrink:0;margin-top:2px;">15:30</span><div class="text-sm" style="line-height:1.6;"><strong>Phụ trước tập</strong> — Trứng luộc + chuối (trước tập ~60p).</div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start;"><span class="pill pill-green" style="flex-shrink:0;margin-top:2px;">18:30</span><div class="text-sm" style="line-height:1.6;"><strong>Tối (sau tập 30–60p)</strong> — Thịt bò/cá hồi + khoai lang + salad dầu oliu.</div></div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="rounded-2xl p-5" style="background:var(--accent-soft);border:1px solid var(--accent);"><strong style="color:var(--accent);">✓ Ưu tiên</strong><p class="text-sm mt-2" style="line-height:1.7;">Thịt nạc, cá, trứng, sữa không đường, gạo lứt, yến mạch, khoai lang, rau xanh, bơ, hạt dinh dưỡng, dầu oliu.</p></div>
+      <div class="rounded-2xl p-5" style="background:var(--accent2-soft);border:1px solid var(--accent2);"><strong style="color:var(--accent2);">✗ Hạn chế</strong><p class="text-sm mt-2" style="line-height:1.7;">Đồ chiên xào, nước ngọt, bánh kẹo, đồ ăn nhanh, mì gói, rượu bia. Xếp đĩa: 1/2 rau, 1/4 đạm, 1/4 tinh bột tốt.</p></div>
+    </div>
+  </div>
+
+  <div class="mt-12 pt-6" style="border-top:1px solid var(--border);">
+    <p class="text-center text-xs" style="color:var(--muted);line-height:1.7;">Số liệu AI ước tính, sai lệch có thể ±15–20%. Người có bệnh nền nên tham khảo ý kiến bác sĩ. API key chỉ lưu trên trình duyệt của bạn.</p>
+  </div>
+</div>
+</div>
+</div>
+
+<script>
+// ===== State =====
+var state = { targetKcal:2000, proteinG:110, carbsG:220, fatG:55, meals:[], key:'', pendingMeal:null };
+var macroChart = null;
+var TODAY = new Date().toISOString().slice(0,10);
+
+// Persistence
+try {
+  state.key = localStorage.getItem('fit_key')||'';
+  var saved = JSON.parse(localStorage.getItem('fit_log')||'null');
+  if(saved && saved.date === TODAY){ state.meals = saved.meals||[]; }
+} catch(e){}
+function saveLog(){ try{ localStorage.setItem('fit_log', JSON.stringify({date:TODAY, meals:state.meals})); }catch(e){} }
+
+// ===== Tabs =====
+(function(){
+  var bar = document.getElementById('tabBar'); if(!bar) return;
+  bar.addEventListener('click', function(e){
+    var btn = e.target.closest('.tab-btn'); if(!btn) return;
+    var target = btn.getAttribute('data-tab');
+    var btns = bar.querySelectorAll('.tab-btn');
+    for(var i=0;i<btns.length;i++) btns[i].classList.remove('active');
+    btn.classList.add('active');
+    var panels = document.querySelectorAll('.tab-panel');
+    for(var j=0;j<panels.length;j++) panels[j].classList.remove('active');
+    var p = document.getElementById(target); if(p) p.classList.add('active');
+    if(target==='tab-personal' && macroChart){ setTimeout(function(){ macroChart.resize(); }, 60); }
+  });
+})();
+
+// ===== Macro chart =====
+(function initChart(n){
+  try {
+    var el = document.getElementById('macroChart'); if(!el) return;
+    if(typeof echarts==='undefined'){ if(n<40){setTimeout(function(){initChart(n+1)},250);} return; }
+    macroChart = echarts.init(el); renderMacro();
+    window.addEventListener('resize', function(){ if(macroChart) macroChart.resize(); });
+  } catch(e){ console.error(e); }
+})(0);
+function renderMacro(){
+  if(!macroChart) return;
+  var st = getComputedStyle(document.documentElement);
+  var accent = st.getPropertyValue('--accent').trim()||'#0d9669', accent2 = st.getPropertyValue('--accent2').trim()||'#d4724a';
+  var pk = state.proteinG*4, ck = state.carbsG*4, fk = state.fatG*9;
+  macroChart.setOption({
+    backgroundColor:'transparent',
+    tooltip:{trigger:'item', formatter:'{b}: {c} kcal ({d}%)'},
+    legend:{bottom:0, textStyle:{color:'#64748b', fontSize:11}, itemWidth:12, itemHeight:12},
+    series:[{type:'pie', radius:['45%','70%'], center:['50%','42%'],
+      label:{show:true, formatter:'{d}%', fontWeight:700, fontSize:12},
+      data:[
+        {value:Math.round(pk), name:'Đạm '+state.proteinG+'g', itemStyle:{color:accent}},
+        {value:Math.round(ck), name:'Tinh bột '+state.carbsG+'g', itemStyle:{color:accent2}},
+        {value:Math.round(fk), name:'Chất béo '+state.fatG+'g', itemStyle:{color:'#94a3b8'}}
+      ]}]
+  }, true);
+}
+
+// ===== TDEE / BMI / size calculator =====
+(function(){
+  var btn = document.getElementById('calcBtn'); if(!btn) return;
+  btn.addEventListener('click', function(){
+    var age = parseFloat(document.getElementById('fAge').value)||28;
+    var h = parseFloat(document.getElementById('fHeight').value)||170;
+    var w = parseFloat(document.getElementById('fWeight').value)||65;
+    var gender = document.getElementById('fGender').value;
+    var act = parseFloat(document.getElementById('fAct').value)||1.55;
+    var goal = document.getElementById('fGoal').value;
+    var chest = parseFloat(document.getElementById('fChest').value)||0;
+    var waist = parseFloat(document.getElementById('fWaist').value)||0;
+
+    var bmi = w / Math.pow(h/100, 2);
+    var bmiCat, bmiColor;
+    if(bmi<18.5){bmiCat='Gầy';bmiColor='#d4724a';}
+    else if(bmi<23){bmiCat='Bình thường';bmiColor='#0d9669';}
+    else if(bmi<25){bmiCat='Thừa cân';bmiColor='#d4724a';}
+    else {bmiCat='Béo phì';bmiColor='#dc2626';}
+
+    var bmr = gender==='male' ? (10*w + 6.25*h - 5*age + 5) : (10*w + 6.25*h - 5*age - 161);
+    var tdee = bmr * act;
+    var target = goal==='cut' ? tdee-400 : (goal==='bulk' ? tdee+300 : tdee);
+    var pRatio = goal==='bulk'?2.0:1.8;
+    var proteinG = Math.round(w*pRatio);
+    var fatG = Math.round(target*0.25/9);
+    var carbsG = Math.round((target - proteinG*4 - fatG*9)/4);
+    var water = Math.round(w*35);
+
+    state.targetKcal = Math.round(target); state.proteinG=proteinG; state.carbsG=carbsG; state.fatG=fatG;
+    renderMacro(); renderCompare();
+
+    var goalTxt = goal==='cut'?'Giảm mỡ':(goal==='bulk'?'Tăng cơ':'Duy trì');
+    document.getElementById('resultBox').innerHTML =
+      '<div style="display:flex;flex-wrap:gap:10px;gap:10px;margin-bottom:14px;">'
+      +'<div style="flex:1 1 90px;padding:12px;border-radius:12px;background:var(--accent-soft);text-align:center;"><div class="text-2xl font-black" style="color:'+bmiColor+';">'+bmi.toFixed(1)+'</div><div class="text-xs font-bold" style="color:var(--muted);">BMI · '+bmiCat+'</div></div>'
+      +'<div style="flex:1 1 90px;padding:12px;border-radius:12px;background:rgba(100,116,139,.08);text-align:center;"><div class="text-2xl font-black">'+Math.round(bmr)+'</div><div class="text-xs font-bold" style="color:var(--muted);">BMR</div></div>'
+      +'<div style="flex:1 1 90px;padding:12px;border-radius:12px;background:rgba(100,116,139,.08);text-align:center;"><div class="text-2xl font-black">'+Math.round(tdee)+'</div><div class="text-xs font-bold" style="color:var(--muted);">TDEE</div></div>'
+      +'</div>'
+      +'<p style="margin-bottom:6px;"><strong>Mục tiêu ('+goalTxt+'):</strong> <span style="color:var(--accent);font-weight:800;">'+Math.round(target)+' kcal/ngày</span></p>'
+      +'<p style="margin-bottom:6px;"><strong>Macro:</strong> Đạm <strong>'+proteinG+'g</strong> · Tinh bột <strong>'+carbsG+'g</strong> · Chất béo <strong>'+fatG+'g</strong></p>'
+      +'<p><strong>Nước:</strong> '+water+' ml/ngày · <strong>Ngủ:</strong> 7–8 tiếng. Đã đồng bộ với tab AI quét món ăn.</p>';
+
+    var sizes = [
+      {s:'S', chest:[0,91], waist:[0,76], wMax:55},
+      {s:'M', chest:[92,97], waist:[77,82], wMax:65},
+      {s:'L', chest:[98,104], waist:[83,89], wMax:75},
+      {s:'XL', chest:[105,112], waist:[90,97], wMax:85},
+      {s:'XXL', chest:[113,300], waist:[98,300], wMax:300}
+    ];
+    function byMeasure(val, key){ for(var i=0;i<sizes.length;i++){ if(val<=sizes[i][key][1]) return sizes[i].s; } return 'XXL'; }
+    function byWeight(){ for(var i=0;i<sizes.length;i++){ if(w<=sizes[i].wMax) return sizes[i].s; } return 'XXL'; }
+    var shirt = chest? byMeasure(chest,'chest') : byWeight();
+    var pants = waist? byMeasure(waist,'waist') : byWeight();
+    var note = (chest||waist)? 'Dựa trên số đo bạn nhập.' : 'Ước theo cân nặng — nhập thêm ngực/eo để chính xác hơn.';
+    document.getElementById('sizeBox').style.display='block';
+    document.getElementById('sizeResult').innerHTML =
+      '<div style="display:flex;gap:14px;flex-wrap:wrap;">'
+      +'<div style="flex:1 1 140px;padding:16px;border-radius:14px;background:var(--accent-soft);text-align:center;border:1px solid var(--accent);"><div class="text-xs font-bold" style="color:var(--muted);">Áo / Top</div><div class="text-4xl font-black mt-1" style="color:var(--accent);">'+shirt+'</div></div>'
+      +'<div style="flex:1 1 140px;padding:16px;border-radius:14px;background:var(--accent2-soft);text-align:center;border:1px solid var(--accent2);"><div class="text-xs font-bold" style="color:var(--muted);">Quần / Bottom</div><div class="text-4xl font-black mt-1" style="color:var(--accent2);">'+pants+'</div></div>'
+      +'</div><p class="text-xs mt-3" style="color:var(--muted);">'+note+'</p>';
+  });
+})();
+
+// ===== API key =====
+(function(){
+  var inp = document.getElementById('apiKey'); if(inp) inp.value = state.key;
+  updateKeyStatus();
+  document.getElementById('keyToggle').addEventListener('click', function(){
+    var box = document.getElementById('keyBox');
+    box.style.display = box.style.display==='none' ? 'block' : 'none';
+  });
+  document.getElementById('saveKey').addEventListener('click', function(){
+    state.key = document.getElementById('apiKey').value.trim();
+    try{ localStorage.setItem('fit_key', state.key); }catch(e){}
+    updateKeyStatus();
+  });
+})();
+function updateKeyStatus(){
+  var el = document.getElementById('keyStatus');
+  el.textContent = state.key ? 'Đã lưu key. AI Vision sẵn sàng — chụp ảnh món ăn và bấm phân tích.' : 'Chưa có key — lấy miễn phí tại aistudio.google.com (Get API key), dán vào ô trên. Không có key vẫn thêm món thủ công.';
+  el.style.color = state.key ? 'var(--accent)' : 'var(--muted)';
+}
+
+// ===== Image capture =====
+function handleFile(file){
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var box = document.getElementById('previewBox');
+    box.innerHTML = '<img id="mealImg" src="'+e.target.result+'" style="width:100%;max-height:340px;object-fit:cover;display:block;" alt="Món ăn">';
+    var btn = document.getElementById('analyzeBtn');
+    btn.disabled = false;
+    document.getElementById('analysisBox').style.display='none';
+  };
+  reader.readAsDataURL(file);
+}
+document.getElementById('camInput').addEventListener('change', function(e){ handleFile(e.target.files[0]); });
+document.getElementById('libInput').addEventListener('change', function(e){ handleFile(e.target.files[0]); });
+
+function downscale(imgEl, maxDim){
+  var canvas = document.createElement('canvas');
+  var w = imgEl.naturalWidth||imgEl.width, h = imgEl.naturalHeight||imgEl.height;
+  var scale = Math.min(1, maxDim/Math.max(w,h));
+  canvas.width = Math.round(w*scale); canvas.height = Math.round(h*scale);
+  var ctx = canvas.getContext('2d');
+  ctx.drawImage(imgEl, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL('image/jpeg', 0.85);
+}
+
+// ===== Gemini AI analyze =====
+var PROMPT = 'Bạn là chuyên gia dinh dưỡng. Nhìn ảnh món ăn, liệt kê TỪNG món có trong ảnh, ước lượng khối lượng gam từng món (dựa trên đĩa/bát thông thường), ước tính kcal và protein/carb/fat tính theo gam. Trả về DUY NHẤT JSON hợp lệ: {"dishes":[{"name":"tên món tiếng Việt","grams":so,"kcal":so,"protein":so,"carb":so,"fat":so}],"meal_kcal":tong_kcal}. Không giải thích, không markdown.';
+
+document.getElementById('analyzeBtn').addEventListener('click', function(){
+  if(!state.key){ document.getElementById('aiStatus').textContent = 'Chưa có API key. Mở "Cài đặt AI" để dán key Gemini.'; return; }
+  var img = document.getElementById('mealImg');
+  if(!img){ document.getElementById('aiStatus').textContent = 'Chưa có ảnh. Hãy chụp hoặc tải ảnh món ăn trước.'; return; }
+  var btn = this; btn.disabled = true;
+  var status = document.getElementById('aiStatus');
+  status.innerHTML = '<span class="spinner"></span>Đang gửi ảnh lên AI phân tích (5–15 giây)...';
+  var b64 = downscale(img, 1024).split(',')[1];
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+state.key, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      contents:[{parts:[{text:PROMPT},{inline_data:{mime_type:'image/jpeg', data:b64}}]}],
+      generationConfig:{response_mime_type:'application/json', temperature:0.2}
+    })
+  }).then(function(r){
+    if(!r.ok){ return r.text().then(function(t){ throw new Error('HTTP '+r.status+' — key sai hoặc hết hạn'); }); }
+    return r.json();
+  }).then(function(data){
+    var text = '';
+    try{ text = data.candidates[0].content.parts[0].text; }catch(e){ throw new Error('Không đọc được kết quả AI'); }
+    var obj = parseJSON(text);
+    if(!obj || !obj.dishes || !obj.dishes.length){ throw new Error('AI không nhận diện được món ăn — thử chụp góc khác rõ hơn.'); }
+    state.pendingMeal = normalizeMeal(obj);
+    renderAnalysis(state.pendingMeal);
+    status.textContent = 'Phân tích xong! Kiểm tra và thêm vào nhật ký bên dưới.';
+  }).catch(function(err){
+    status.textContent = 'Lỗi: ' + err.message;
+  }).finally(function(){ btn.disabled = false; });
+});
+
+function parseJSON(t){
+  try{ return JSON.parse(t); }catch(e){}
+  var m = t.match(/\{[\s\S]*\}/); if(m){ try{ return JSON.parse(m[0]); }catch(e){} }
+  var m2 = t.match(/\[[\s\S]*\]/); if(m2){ try{ return {dishes: JSON.parse(m2[0])}; }catch(e){} }
+  return null;
+}
+function normalizeMeal(obj){
+  var dishes = (obj.dishes||[]).map(function(d){
+    return { name: String(d.name||'Món ăn'), grams: +d.grams||0, kcal: +d.kcal||0, protein:+d.protein||0, carb:+d.carb||0, fat:+d.fat||0 };
+  });
+  var tot = {kcal:0, protein:0, carb:0, fat:0};
+  dishes.forEach(function(d){ tot.kcal+=d.kcal; tot.protein+=d.protein; tot.carb+=d.carb; tot.fat+=d.fat; });
+  return { dishes: dishes, total: tot, time: new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'}) };
+}
+
+function renderAnalysis(meal){
+  var box = document.getElementById('analysisBox'); box.style.display='block';
+  var html = '<div style="overflow-x:auto;"><table class="w-full text-sm" style="min-width:420px;"><thead><tr class="text-xs uppercase" style="color:var(--muted);border-bottom:1px solid var(--border);"><th class="text-left pb-2">Món</th><th class="text-right pb-2">Gram</th><th class="text-right pb-2">Kcal</th><th class="text-right pb-2">Đạm</th><th class="text-right pb-2">Carb</th><th class="text-right pb-2">Béo</th></tr></thead><tbody>';
+  meal.dishes.forEach(function(d){
+    html += '<tr style="border-bottom:1px solid var(--border);"><td class="py-2 font-bold">'+d.name+'</td><td class="text-right">'+d.grams+'</td><td class="text-right font-bold" style="color:var(--accent);">'+d.kcal+'</td><td class="text-right">'+d.protein+'g</td><td class="text-right">'+d.carb+'g</td><td class="text-right">'+d.fat+'g</td></tr>';
+  });
+  html += '<tr><td class="py-2 font-extrabold">Tổng bữa ăn</td><td></td><td class="text-right font-extrabold" style="color:var(--accent);">'+meal.total.kcal+'</td><td class="text-right font-bold">'+meal.total.protein+'g</td><td class="text-right font-bold">'+meal.total.carb+'g</td><td class="text-right font-bold">'+meal.total.fat+'g</td></tr>';
+  html += '</tbody></table></div><p class="text-xs mt-2" style="color:var(--muted);">Số liệu AI ước tính — bạn có thể chỉnh sửa bằng cách thêm thủ công nếu thấy lệch.</p>';
+  document.getElementById('analysisContent').innerHTML = html;
+  document.getElementById('addMealBtn').style.display = 'block';
+}
+
+document.getElementById('addMealBtn').addEventListener('click', function(){
+  if(!state.pendingMeal) return;
+  state.meals.push(state.pendingMeal);
+  state.pendingMeal = null;
+  document.getElementById('analysisBox').style.display='none';
+  document.getElementById('aiStatus').textContent = 'Đã thêm vào nhật ký hôm nay!';
+  saveLog(); renderMealList(); renderCompare();
+});
+
+// ===== Manual food chips + custom add =====
+var FOODS = [
+  {n:'Phở bò (tô)', k:450, p:25, c:60, f:12},{n:'Bún chả (đĩa)', k:550, p:30, c:70, f:18},
+  {n:'Cơm tấm sườn', k:700, p:35, c:90, f:22},{n:'Bánh mì thịt', k:450, p:18, c:60, f:15},
+  {n:'Ức gà (150g)', k:250, p:46, c:0, f:6},{n:'Cá hồi (150g)', k:310, p:34, c:0, f:19},
+  {n:'Cơm gạo lứt (chén)', k:220, p:5, c:46, f:2},{n:'Trứng (1 quả)', k:78, p:6, c:0.6, f:5},
+  {n:'Sữa không đường (ly)', k:120, p:8, c:12, f:5},{n:'Chuối (1 quả)', k:105, p:1, c:27, f:0},
+  {n:'Salad rau (đĩa)', k:60, p:2, c:10, f:2},{n:'Khoai lang (150g)', k:130, p:2, c:30, f:0},
+  {n:'Mì gói (gói)', k:400, p:14, c:55, f:14}
+];
+var chipBox = document.getElementById('foodChips');
+FOODS.forEach(function(f){
+  var b = document.createElement('button');
+  b.className = 'food-chip'; b.textContent = f.n+' · '+f.k+' kcal';
+  b.addEventListener('click', function(){
+    state.meals.push({dishes:[{name:f.n, grams:0, kcal:f.k, protein:f.p, carb:f.c, fat:f.f}], total:{kcal:f.k, protein:f.p, carb:f.c, fat:f.f}, time:new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})});
+    saveLog(); renderMealList(); renderCompare();
+  });
+  chipBox.appendChild(b);
+});
+document.getElementById('addCustom').addEventListener('click', function(){
+  var v = document.getElementById('customFood').value.trim(); if(!v) return;
+  var p = v.split('|').map(function(x){return x.trim();});
+  var dish = {name:p[0]||'Món tự nhập', grams:0, kcal:+p[1]||200, protein:+p[2]||0, carb:+p[3]||0, fat:+p[4]||0};
+  state.meals.push({dishes:[dish], total:{kcal:dish.kcal, protein:dish.protein, carb:dish.carb, fat:dish.fat}, time:new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})});
+  document.getElementById('customFood').value='';
+  saveLog(); renderMealList(); renderCompare();
+});
+
+// ===== Daily log render =====
+function renderMealList(){
+  var list = document.getElementById('mealList');
+  if(!state.meals.length){ list.innerHTML='<p class="text-sm" style="color:var(--muted);">Chưa có bữa ăn nào. Hãy chụp ảnh và phân tích, hoặc thêm thủ công.</p>'; return; }
+  list.innerHTML='';
+  state.meals.forEach(function(meal, idx){
+    var d = document.createElement('div'); d.className='log-meal';
+    var dishesHtml = meal.dishes.map(function(dish){ return '<div class="dish">• '+dish.name+(dish.grams?' ('+dish.grams+'g)':'')+' — '+dish.kcal+' kcal · Đạm '+dish.protein+'g · Carb '+dish.carb+'g · Béo '+dish.fat+'g</div>'; }).join('');
+    d.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;"><strong>'+meal.time+' · '+meal.total.kcal+' kcal</strong><button data-i="'+idx+'" style="background:none;border:none;color:#dc2626;font-weight:800;cursor:pointer;font-size:16px;">×</button></div>'+dishesHtml;
+    d.querySelector('button').addEventListener('click', function(){ state.meals.splice(idx,1); saveLog(); renderMealList(); renderCompare(); });
+    list.appendChild(d);
+  });
+}
+document.getElementById('clearLog').addEventListener('click', function(){ state.meals=[]; saveLog(); renderMealList(); renderCompare(); });
+
+// ===== Comparison bars =====
+function renderCompare(){
+  var tot = {kcal:0, protein:0, carb:0, fat:0};
+  state.meals.forEach(function(m){ tot.kcal+=m.total.kcal; tot.protein+=m.total.protein; tot.carb+=m.total.carb; tot.fat+=m.total.fat; });
+  var bars = [
+    {label:'Năng lượng (kcal)', val:Math.round(tot.kcal), target:state.targetKcal, unit:'kcal', color:'var(--accent)', overBad:true},
+    {label:'Đạm (protein)', val:Math.round(tot.protein), target:state.proteinG, unit:'g', color:'#0d9669', overBad:false},
+    {label:'Tinh bột (carb)', val:Math.round(tot.carb), target:state.carbsG, unit:'g', color:'var(--accent2)', overBad:true},
+    {label:'Chất béo (fat)', val:Math.round(tot.fat), target:state.fatG, unit:'g', color:'#94a3b8', overBad:true}
+  ];
+  var html = '';
+  bars.forEach(function(b){
+    var pct = Math.min(100, Math.round(b.val/b.target*100));
+    var over = b.val > b.target;
+    var barColor = over && b.overBad ? 'linear-gradient(90deg,#dc2626,var(--accent2))' : b.color;
+    var remain = b.target - b.val;
+    var statusTxt = over ? (b.overBad ? 'Vượt '+Math.abs(remain)+' '+b.unit : 'Đạt mục tiêu (vượt '+Math.abs(remain)+' '+b.unit+')') : 'Còn '+remain+' '+b.unit;
+    var statusColor = over && b.overBad ? '#dc2626' : 'var(--accent)';
+    html += '<div style="margin-bottom:14px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span class="font-bold">'+b.label+'</span><span><strong>'+b.val+'</strong> / '+b.target+' '+b.unit+' · <span style="color:'+statusColor+';font-weight:700;">'+statusTxt+'</span></span></div><div class="scan-bar"><div class="scan-fill" style="width:'+pct+'%;background:'+barColor+';"></div></div></div>';
+  });
+  document.getElementById('compareBars').innerHTML = html;
+  var msg = document.getElementById('compareMsg');
+  if(state.meals.length){
+    if(tot.kcal <= state.targetKcal) msg.textContent = 'Tốt! Còn '+(state.targetKcal - Math.round(tot.kcal))+' kcal cho hôm nay. Đạm đã nạp '+Math.round(tot.protein)+'/'+state.proteinG+'g.';
+    else msg.textContent = 'Đã vượt '+(Math.round(tot.kcal)-state.targetKcal)+' kcal so với mục tiêu. Ngày mai cân chỉnh phần ăn nhé.';
+    msg.style.color = tot.kcal > state.targetKcal ? '#dc2626' : 'var(--accent)';
+  } else {
+    msg.textContent = 'Mục tiêu: '+state.targetKcal+' kcal · Đạm '+state.proteinG+'g · Carb '+state.carbsG+'g · Béo '+state.fatG+'g (tính theo TDEE của bạn ở tab Cá nhân).';
+    msg.style.color = 'var(--muted)';
+  }
+}
+renderMealList(); renderCompare();
+</script>
+</html>
